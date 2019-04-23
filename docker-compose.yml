@@ -1,0 +1,91 @@
+version: '3.3'
+services:
+
+  databasesvc:
+    image: mysql:latest
+    restart: always
+    hostname: mysqlhost
+    command: --log-bin --binlog_format=ROW --binlog_expire_logs_seconds=172800
+    env_file:
+      - .env
+    networks:
+      - backend
+      - frontend
+    ports:
+      - "3306"
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./databasesvc:/docker-entrypoint-initdb.d
+
+  readbinlogsvc:
+    build: readbinlogsvc
+    volumes:
+      - ./readbinlogsvc:/project
+      - ./commons:/setup
+      #temp fix for bug in zongji:
+      - ./readbinlogsvc/src/zongji.js:/usr/src/app/node_modules/zongji/index.js:ro
+    env_file:
+      - .env
+    networks:
+      - backend
+    depends_on:
+      - databasesvc
+      - awssvc
+    restart: always
+
+  awssvc:
+    image: localstack/localstack
+    networks:
+      - backend
+      - frontend
+    env_file:
+      - .env
+    ports:
+      - '4563-4584'
+      - '8055:8080'
+    environment:
+      - SERVICES=kinesis,lambda,dynamodb
+      - LAMBDA_EXECUTOR=docker
+      #note: we need to use the prefix docker_ for the network (seen by 'docker network ls')
+      - LAMBDA_DOCKER_NETWORK=docker_backend
+      - DEBUG=0
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  setupsvc:
+    build: setupsvc
+    env_file:
+      - .env
+    volumes:
+      - './commons:/root'
+    networks:
+      - backend
+    depends_on:
+      - awssvc
+
+  jupytersvc:
+    build: jupytersvc
+    networks:
+      - backend
+      - frontend
+    ports:
+      - '8889:8889'
+    volumes:
+      - ./jupytersvc:/data
+      - ./commons:/setup
+    depends_on:
+      - databasesvc
+      - setupsvc
+    restart: always
+
+volumes:
+    # Let the engine create a named volume
+    # Mount it in the service(s)
+    data:
+
+networks:
+    backend:
+        driver: bridge
+    frontend:
+        driver: bridge

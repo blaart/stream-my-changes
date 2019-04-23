@@ -1,0 +1,17 @@
+{
+  "name": "processkinesisstreamcontractchange2",
+  "version": "1.0.0",
+  "description": "Lambda for retrieving new contractdata and product description and store it as xml",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peter Bosch <peter@e-tunity.nl> (e-tunity.nl)",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.432.0",
+    "mysql": "^2.16.0",
+    "xml-js": "^1.6.11",
+    "xml-json": "^2.0.2"
+  }
+}
