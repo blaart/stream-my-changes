@@ -51,7 +51,7 @@ services:
       - LAMBDA_EXECUTOR=docker
       #note: we need to use the prefix docker_ for the network (seen by 'docker network ls')
       - LAMBDA_DOCKER_NETWORK=backend
-      - DEBUG=0
+      - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

@@ -61,6 +61,8 @@ The definition of the several containers can be found in the docker-compose.yml 
 
 Note that these services can also be setup in the AWS cloud. Use RDS for the mysql database. Run the readbinlog application via ECR/ECS and eventually EKS/Fargate etc.
 
+Setting the DEBUG setting to 1 in the docker-compose for the awssvc service shows the logging of the Lambda's in the awssvc log. 
+
 # Changing Lambda code
 T.b.d.
 
