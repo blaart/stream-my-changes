@@ -37,7 +37,7 @@ services:
 
   awssvc:
     container_name: awssvc
-    image: localstack/localstack
+    image: localstack/localstack:0.9.1
     networks:
       - backend
       - frontend
@@ -49,10 +49,12 @@ services:
     environment:
       - SERVICES=kinesis,lambda,dynamodb
       - LAMBDA_EXECUTOR=docker
+      - LAMBDA_REMOTE_DOCKER=true
       #note: we need to use the prefix docker_ for the network (seen by 'docker network ls')
       - LAMBDA_DOCKER_NETWORK=backend
       - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
+      # - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
