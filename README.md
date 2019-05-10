@@ -48,7 +48,7 @@ You can open the notebook via a token that can be found in the jupytersvc loggin
 > To access the notebook, open this file in a browser: file:///root/.local/share/jupyter/runtime/nbserver-9-open.html
 > Or copy and paste one of these URLs:  http://(e78b754bb57b or 127.0.0.1):8889/?token=349f8e64419af82af99de17aeecc49895f325ea88d5747fb
 
-So opening http://127.0.0.1:8889/?token=<yourtoken>, will open the notebook.
+So opening http://127.0.0.1:8889/?token=yourtoken, will open the notebook.
 In this example you can run through the different steps for retrieving current data in mysql and dynamo, add some rows to the mysql database and show the result in the dynamodb. Here you can add your own steps.
 
 # Used containers
@@ -61,7 +61,7 @@ The definition of the several containers can be found in the docker-compose.yml 
 
 Note that these services can also be setup in the AWS cloud. Use RDS for the mysql database. Run the readbinlog application via ECR/ECS and eventually EKS/Fargate etc.
 
-Setting the DEBUG setting to 1 in the docker-compose for the awssvc service shows the logging of the Lambda's in the awssvc log. 
+Setting the DEBUG setting to 1 in the docker-compose for the awssvc service shows the logging of the Lambda's in the awssvc log.
 
 # Changing Lambda code
 T.b.d.
