@@ -45,10 +45,6 @@ The jupyter notebook container is used for easily running some statements within
 
 You can open the notebook via a token that can be found in the jupytersvc logging: `./log.sh jupytersvc`. Here you will see the link you can open in your browser:
 
-> To access the notebook, open this file in a browser: file:///root/.local/share/jupyter/runtime/nbserver-9-open.html
-> Or copy and paste one of these URLs:  http://(e78b754bb57b or 127.0.0.1):8889/?token=349f8e64419af82af99de17aeecc49895f325ea88d5747fb
-
-So opening http://127.0.0.1:8889/?token=yourtoken, will open the notebook.
 In this example you can run through the different steps for retrieving current data in mysql and dynamo, add some rows to the mysql database and show the result in the dynamodb. Here you can add your own steps.
 
 # Used containers
