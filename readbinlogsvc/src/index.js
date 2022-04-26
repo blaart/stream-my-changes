@@ -20,7 +20,7 @@ zongji.on('binlog', function(evt) {
             // region: 'eu-central-1',
             region: process.env.AWS_REGION,
             endpoint: `http://${process.env.KINESIS_HOST}:${process.env.KINESIS_PORT}`
-            // endpoint: 'localhost:4568'
+            // endpoint: 'localhost:4566'
         });
         var record = {
           Data: JSON.stringify(stream),

@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3.9-slim
 
 # Set timezone to UTC by default
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
@@ -8,7 +8,7 @@ RUN pip install awscli
 
 # add mysql client
 RUN apt-get update
-RUN apt-get -y install mysql-client
+RUN apt-get -y install default-mysql-client
 
 # add yupiter
 RUN pip uninstall -y six && pip install six

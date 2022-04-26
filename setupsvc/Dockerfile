@@ -3,10 +3,9 @@ FROM python:alpine
 ARG CLI_VERSION=1.16.86
 
 RUN apk -uv add --no-cache groff jq less && \
-    pip install --no-cache-dir awscli==$CLI_VERSION
+    pip install --no-cache-dir awscli
 
-RUN apk add nodejs
-RUN apk add --update nodejs nodejs-npm
+RUN apk add --update npm
 RUN apk add zip
 
 RUN mkdir /setup

@@ -93,18 +93,20 @@ DEBUG=1 LAMBDA_EXECUTOR=docker SERVICES=kinesis,cloudwatch,lambda,dynamodb local
 ## 2.1 Create 2 DynamoDB's
 run the following commands to create two tables in dynamodb
 ``` bash
-aws --endpoint-url=http://localhost:4569 dynamodb create-table --table-name contract1 --attribute-definitions AttributeName=contractnumber,AttributeType=S --key-schema AttributeName=contractnumber,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
-
-
+aws --endpoint-url=http://localhost:4566 dynamodb create-table \
+    --table-name contract1 \
+    --attribute-definitions AttributeName=contractnumber,AttributeType=S \
+    --key-schema AttributeName=contractnumber,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 
 
 # to read all records in a dynamodb use:
-aws --endpoint-url=http://localhost:4569 dynamodb scan --table-name=contract1
+aws --endpoint-url=http://localhost:4566 dynamodb scan --table-name=contract1
 ```
 
 ## 2.2 Create the consumer lambda
 ```bash
-aws --endpoint-url=http://localhost:4574 lambda create-function \
+aws --endpoint-url=http://localhost:4566 lambda create-function \
     --function-name=processKinesisStreamContractChange1 \
     --runtime=nodejs6.10 \
     --role=r1 \
@@ -112,7 +114,7 @@ aws --endpoint-url=http://localhost:4574 lambda create-function \
     --zip-file fileb://processKinesisStreamContractChange1.local.zip
 
 #And
-aws --endpoint-url=http://localhost:4574 lambda create-function \
+aws --endpoint-url=http://localhost:4566 lambda create-function \
     --function-name=processKinesisStreamContractChange2 \
     --runtime=nodejs6.10 \
     --role=r1 \
@@ -120,53 +122,53 @@ aws --endpoint-url=http://localhost:4574 lambda create-function \
     --zip-file fileb://processKinesisStreamContractChange2.local.zip
 
 # to test:
-aws --endpoint-url=http://localhost:4574 lambda invoke \
+aws --endpoint-url=http://localhost:4566 lambda invoke \
     --function-name=processKinesisStreamContractChange1 \
     outfile=out.txt
 
-aws --endpoint-url=http://localhost:4574 lambda invoke \
+aws --endpoint-url=http://localhost:4566 lambda invoke \
     --function-name=processKinesisStreamContractChange1 \
     outfile=out.txt \
     --payload='{ "Records": [ { "kinesis": { "partitionKey": "partitionKey-03", "kinesisSchemaVersion": "1.0", "data": "ewogICAgImFjdGlvbiI6ICJJbnNlcnQiLAogICAgInR5cGUiOiAiY29udHJhY3QiLAogICAgImlkIjogODgKfQ==", "sequenceNumber": "49545115243490985018280067714973144582180062593244200961", "approximateArrivalTimestamp": 1428537600 }, "eventSource": "aws:kinesis", "eventID": "shardId-000000000000:49545115243490985018280067714973144582180062593244200961", "invokeIdentityArn": "arn:aws:iam::EXAMPLE", "eventVersion": "1.0", "eventName": "aws:kinesis:record", "eventSourceARN": "arn:aws:kinesis:EXAMPLE", "awsRegion": "eu-central-1" } ] }'
 
 #to update a lambda:
-aws --endpoint-url=http://localhost:4569 dynamodb create-table --table-name contract1 --attribute-definitions AttributeName=contractnumber,AttributeType=S --key-schema AttributeName=contractnumber,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+aws --endpoint-url=http://localhost:4566 dynamodb create-table --table-name contract1 --attribute-definitions AttributeName=contractnumber,AttributeType=S --key-schema AttributeName=contractnumber,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 ```
 ## 2.2 Create the KinesisStream
 Create the kinesisStream:
 ``` bash
-aws --endpoint-url=http://localhost:4568 kinesis create-stream \
+aws --endpoint-url=http://localhost:4566 kinesis create-stream \
     --stream-name contractChanges \
     --shard-count 1
 
 # to show the streams:
-aws --endpoint-url=http://localhost:4568 kinesis list-streams
+aws --endpoint-url=http://localhost:4566 kinesis list-streams
 
 # and to describe the stream:
-aws --endpoint-url=http://localhost:4568 kinesis describe-stream --stream-name contractChanges
+aws --endpoint-url=http://localhost:4566 kinesis describe-stream --stream-name contractChanges
 
 ```
 And link the lambda as consumer:
 ``` bash
-aws --endpoint-url=http://localhost:4574 lambda create-event-source-mapping \
+aws --endpoint-url=http://localhost:4566 lambda create-event-source-mapping \
     --function-name processKinesisStreamContractChange1 \
     --enabled \
     --batch-size 500 \
     --starting-position AT_TIMESTAMP \
     --starting-position-timestamp 1541139109 \
-    --event-source-arn arn:aws:kinesis:us-east-1:000000000000:stream/contractChanges
+    --event-source-arn arn:aws:kinesis:eu-central-1:000000000000:stream/contractChanges
 
 # sme for the second lambda:
-aws --endpoint-url=http://localhost:4574 lambda create-event-source-mapping \
+aws --endpoint-url=http://localhost:4566 lambda create-event-source-mapping \
     --function-name processKinesisStreamContractChange2 \
     --enabled \
     --batch-size 500 \
     --starting-position AT_TIMESTAMP \
     --starting-position-timestamp 1541139109 \
-    --event-source-arn arn:aws:kinesis:us-east-1:000000000000:stream/contractChanges
+    --event-source-arn arn:aws:kinesis:eu-central-1:000000000000:stream/contractChanges
 
 #test de stream by:
-aws --endpoint-url=http://localhost:4568 kinesis put-record \
+aws --endpoint-url=http://localhost:4566 kinesis put-record \
     --stream-name contractChanges \
     --partition-key 'bla' \
     --data '

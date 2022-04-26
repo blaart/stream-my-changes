@@ -33,11 +33,12 @@ services:
     depends_on:
       - databasesvc
       - awssvc
+      - setupsvc
     restart: always
 
   awssvc:
     container_name: awssvc
-    image: localstack/localstack:0.9.1
+    image: localstack/localstack:latest
     networks:
       - backend
       - frontend
