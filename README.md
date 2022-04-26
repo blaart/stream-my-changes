@@ -63,7 +63,7 @@ Setting the DEBUG setting to 1 in the docker-compose for the awssvc service show
 T.b.d.
 
 # Notes
-* You can check the installed AWS components in Localstack in your browser via http://localhost:8055
+* See [this](https://dockerlabs.collabnix.com/docker/cheatsheet/) for more docker hints
 
 # ToDo's
 |Nr.| Description |
@@ -75,4 +75,5 @@ T.b.d.
 # Version log
 |Date|Version|Description|
 |----|-------|-----------|
+|2022-04-26|0.0.2| Updated depencies to the latest versions and made it work |
 |2019-04-22|0.0.1| First draft|
